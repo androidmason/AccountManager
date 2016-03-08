@@ -1,0 +1,23 @@
+@(message: String) @main("Welcome to Play") {
+
+<table>
+	<thead>
+		<tr>
+			<th data-field="id">NAME</th>
+			<th data-field="balance">BALANCE</th>
+		</tr>
+	</thead>
+
+	<tbody id="list">
+
+
+	</tbody>
+
+</table>
+
+<form method="post" action="@routes.Application.addPerson">
+	<input name="name" type="text">
+	<button>Add Person</button>
+</form>
+
+}

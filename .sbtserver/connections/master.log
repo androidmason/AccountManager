@@ -1,0 +1,10 @@
+New log file opened at Sat Feb 06 11:56:05 IST 2016 by 1832@Monils-MacBook-Pro.local
+Taking next connection to: 51053
+New client attempting to connect on port: 51054-51053
+  Address = /192.168.0.101:51053
+This client on port 51054 has uuid 718ed928-2792-4372-a29d-62da61399606 configName play-fork-run humanReadableName Play Fork Run protocolVersion 1 featureTags Vector()
+Connected Clients: play-fork-run-718ed928-2792-4372-a29d-62da61399606
+Taking next connection to: 51053
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 51053

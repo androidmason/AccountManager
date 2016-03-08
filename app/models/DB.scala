@@ -1,0 +1,98 @@
+package models
+
+import scalikejdbc._
+import java.sql.Date
+import java.util.Calendar
+import java.sql.Timestamp
+import common.Round
+
+object DB {
+
+  // initialize JDBC driver & connection pool
+  Class.forName("org.h2.Driver")
+  ConnectionPool.singleton("jdbc:h2:~/test", "sa", "")
+  ConnectionPool.add('foo, "jdbc:h2:~/test", "sa", "")
+
+  val settings = ConnectionPoolSettings(
+    initialSize = 5,
+    maxSize = 20,
+    connectionTimeoutMillis = 3000L,
+    validationQuery = "select 1 from dual")
+
+  implicit val session = AutoSession
+
+  def executeDDL = {
+    // table creation, you can run DDL by using #execute as same as JDBC
+    sql"""
+
+drop table balance_sheet;
+
+create table balance_sheet (
+  id serial not null primary key,
+  name varchar2(64) unique,
+  balance int,
+  pending_rounds varchar2(100),
+  updated_at timestamp not null,
+  created_at timestamp not null
+);
+
+create table ledger(
+ id serial not null primary key,
+ name varchar2(64),
+ contribution int,
+ round_key varchar2(64),
+ round_details varchar2(254),
+ updated_at timestamp not null,
+ total_balance int,
+);
+
+""".execute.apply()
+
+  }
+
+  def  loadData() : List[BalanceSheet] =
+    {
+      val balanceSheet: List[BalanceSheet] = scalikejdbc.DB readOnly { implicit session =>
+        sql"select name,balance from balance_sheet".map(rs => new BalanceSheet(rs.string("name"), rs.int("balance"))).list.apply()
+      }
+
+      //balanceSheet.foreach { x => println(x) }
+      balanceSheet
+    }
+
+  def updateBalanceSheet(name: String, receivedAmount: Int) =
+    {
+      scalikejdbc.DB localTx { implicit session =>
+        sql"update balance_sheet set balance = balance-${receivedAmount} where name = ${name}".update.apply()
+      }
+    }
+
+  def makeEntryToLedger(ledger: Ledger) = {
+
+    var contribution: Int = ledger.contribution
+    if (ledger.roundkey == Round.EXPENSE)
+      contribution = ledger.contribution * -1
+
+    val previousBalance: Option[Int] = scalikejdbc.DB readOnly { implicit session =>
+      sql"SELECT TOP 1 balance FROM ledger ORDER BY id".map(rs => rs.int("balance")).first.apply()
+    }
+    val newBalance = contribution + previousBalance.get
+
+    scalikejdbc.DB localTx { implicit session =>
+      sql"insert into ledger(name, contribution, round_key, updated_at, total_balance) values (${ledger.name},${contribution}, current_timestamp, ${newBalance})".update.apply()
+    }
+  }
+
+  def addRound(round: String) = {
+    
+    var contribution = 200
+    if(round.equals("FAREWELL"))
+        contribution = 150
+    
+      scalikejdbc.DB localTx { implicit session =>
+        sql"update balance_sheet set balance = balance+${contribution}".update.apply()
+      }
+    
+  }
+
+}
