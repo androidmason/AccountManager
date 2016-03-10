@@ -1,6 +1,5 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -20,21 +19,12 @@ class Application extends Controller {
     val members = DB.loadData()
     Ok(Json.toJson(members))
   }
-  
-  val personForm: Form[Person] = Form {
-    mapping(
-      "name" -> text)(Person.apply)(Person.unapply)
-
-  }
 
   def addPerson = Action {
      //DB.executeDDL
       DB.loadData()
-      
       DB.updateBalanceSheet("Monil", 150);
-      
       DB.loadData()
-      
       Redirect(routes.Application.index())
   }
 }

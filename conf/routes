@@ -8,7 +8,11 @@ GET    /               controllers.Application.index
 # Load Members data
 GET    /members			controllers.Application.members
 
-POST   /person      controllers.Application.addPerson
+POST   /person      	controllers.Application.addPerson
+
+# Authentication
+GET	   /admin			controllers.Authentication.getLogin
+POST   /authenticate	controllers.Authentication.authenticate
 
 
 # Map static resources from the /public folder to the /assets URL path
