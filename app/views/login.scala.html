@@ -1,0 +1,27 @@
+@(message: String) @main("Welcome Admin") {
+
+<div class="col s12 vcard-panel hoverable"
+	style="align-items: center; position:absolute; height: 50%; width: 50%">
+
+	<form class="col s8" method="post"
+		action="@routes.Authentication.authenticate()">
+
+		<div class="row">
+			<div class="input-field col s8">
+				<input id="pass" name="pass" type="password" class="validate"> <label
+					for="pass"></label>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s6">
+				<p class="center">
+					<button class="btn btn-large waves-effect waves-light"
+						type="submit" name="action">Login</button>
+				</p>
+			</div>
+		</div>
+	</form>
+</div>
+
+}
