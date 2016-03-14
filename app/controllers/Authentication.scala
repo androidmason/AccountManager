@@ -20,9 +20,9 @@ class Authentication extends Controller{
  def authenticate = Action { implicit request =>
    val person = loginForm.bindFromRequest.get
    if (person.pass.equals("committee@321"))
-     Redirect(routes.Application.index())
+     Redirect(routes.Administration.getAdminPanel())
    else
      Redirect(routes.Authentication.getLogin())
  }
- 
+
 }

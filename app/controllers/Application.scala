@@ -27,4 +27,6 @@ class Application extends Controller {
       DB.loadData()
       Redirect(routes.Application.index())
   }
+  
+ 
 }
