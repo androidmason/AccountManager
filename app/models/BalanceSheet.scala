@@ -1,6 +1,7 @@
 package models
 
 import scalikejdbc._
+import play.api.libs.json.Json
 
 
 case class BalanceSheet(var name: String,var balance: Int)
@@ -9,9 +10,8 @@ case class BalanceSheet(var name: String,var balance: Int)
 object BalanceSheet  extends SQLSyntaxSupport[BalanceSheet]
 {
   
+  implicit val balanceSheetFormat = Json.format[BalanceSheet];
   override val tableName = "balance_sheet"
-
-  // If you use NamedDB for this entity, override connectionPoolName
-  //override val connectionPoolName = 'anotherdb
+ 
 
 }

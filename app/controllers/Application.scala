@@ -3,7 +3,7 @@ package controllers
 import play.api.mvc._
 import play.api.data.Form
 import play.api.data.Forms._
-import models.{ DB,Person }
+import models.{ DB, Person }
 import play.api.db.Databases
 import models.BalanceSheet
 import play.api.libs.json.Json
@@ -21,12 +21,10 @@ class Application extends Controller {
   }
 
   def addPerson = Action {
-     //DB.executeDDL
-      DB.loadData()
-      DB.updateBalanceSheet("Monil", 150);
-      DB.loadData()
-      Redirect(routes.Application.index())
+    //DB.executeDDL
+    DB.loadData()
+    DB.updateBalanceSheet("Monil", 150);
+    DB.loadData()
+    Redirect(routes.Application.index())
   }
-  
- 
 }

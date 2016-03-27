@@ -15,6 +15,9 @@ POST   /authenticate	controllers.Authentication.authenticate
 
 #Administration
 GET    /admin/manage	controllers.Administration.getAdminPanel
+POST   /admin/collect	controllers.Administration.collectPayment
+POST   /admin/round		controllers.Administration.addRound
+
 
 
 # Map static resources from the /public folder to the /assets URL path

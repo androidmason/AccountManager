@@ -50,20 +50,18 @@ create table ledger(
 
   }
 
-  def  loadData() : List[BalanceSheet] =
+  def loadData(): List[BalanceSheet] =
     {
       val balanceSheet: List[BalanceSheet] = scalikejdbc.DB readOnly { implicit session =>
         sql"select name,balance from balance_sheet".map(rs => new BalanceSheet(rs.string("name"), rs.int("balance"))).list.apply()
       }
-
-      //balanceSheet.foreach { x => println(x) }
       balanceSheet
     }
 
   def updateBalanceSheet(name: String, receivedAmount: Int) =
     {
       scalikejdbc.DB localTx { implicit session =>
-        sql"update balance_sheet set balance = balance-${receivedAmount} where name = ${name}".update.apply()
+        sql"update balance_sheet set balance = balance-${receivedAmount}, updated_at=current_timestamp where name = ${name}".update.apply()
       }
     }
 
@@ -74,24 +72,34 @@ create table ledger(
       contribution = ledger.contribution * -1
 
     val previousBalance: Option[Int] = scalikejdbc.DB readOnly { implicit session =>
-      sql"SELECT TOP 1 balance FROM ledger ORDER BY id".map(rs => rs.int("balance")).first.apply()
+      sql"SELECT TOP 1 total_balance FROM ledger ORDER BY id".map(rs => rs.int("total_balance")).first.apply()
     }
-    val newBalance = contribution + previousBalance.get
+    val newBalance = contribution + previousBalance.getOrElse(0)
 
     scalikejdbc.DB localTx { implicit session =>
-      sql"insert into ledger(name, contribution, round_key, updated_at, total_balance) values (${ledger.name},${contribution}, current_timestamp, ${newBalance})".update.apply()
+      sql"insert into ledger(name, contribution, round_key, updated_at, total_balance) values (${ledger.name},${contribution},${ledger.roundkey}, current_timestamp, ${newBalance})".update.apply()
     }
   }
 
   def addRound(round: String) = {
-    
+
     var contribution = 200
-    if(round.equals("FAREWELL"))
-        contribution = 150
-    
-      scalikejdbc.DB localTx { implicit session =>
-        sql"update balance_sheet set balance = balance+${contribution}".update.apply()
+    if (round.equals("FAREWELL"))
+      contribution = 150
+    else if (round.equals("WEDDING"))
+      contribution = 100
+
+    scalikejdbc.DB localTx { implicit session =>
+      sql"update balance_sheet set balance = balance+${contribution}".update.apply()
+    }
+
+  }
+  
+  def getNames: List[String] = {
+    val names: List[String] = scalikejdbc.DB readOnly { implicit session =>
+        sql"select name from balance_sheet".map(rs => (rs.string("name"))).list.apply()
       }
+      names
     
   }
 
