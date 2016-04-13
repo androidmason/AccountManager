@@ -53,7 +53,7 @@ create table ledger(
   def loadData(): List[BalanceSheet] =
     {
       val balanceSheet: List[BalanceSheet] = scalikejdbc.DB readOnly { implicit session =>
-        sql"select name,balance from balance_sheet".map(rs => new BalanceSheet(rs.string("name"), rs.int("balance"))).list.apply()
+        sql"select name,balance from balance_sheet order by name".map(rs => new BalanceSheet(rs.string("name"), rs.int("balance"))).list.apply()
       }
       balanceSheet
     }
