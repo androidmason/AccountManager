@@ -1,7 +1,14 @@
-@(names: List[String]) @main("Welcome Admin") {
+@(names: List[String], message: String) @main("Welcome Admin") {
+
+@if(!message.isEmpty())
+{
+	<script type="text/javascript"
+		Materialize.toast(message, 3000, 'rounded')
+	</script>
+}
 
 <div class="row">
-	<div class="col s12 m6">
+	<div class="col s3 offset-s3">
 		<div class="card blue-grey darken-1">
 			<form method="post" action="/admin/collect">
 				<div class="card-content white-text">
@@ -25,11 +32,11 @@
 			</form>
 		</div>
 	</div>
-	<div class="col s12 m6">
+	<div class="col s3">
 		<div class="card blue-grey darken-1">
 			<form method="post" action="/admin/round">
 				<div class="card-content white-text">
-					<span class="card-title">Collect payment</span> <select
+					<span class="card-title">Add Round</span> <select
 						name="round">
 						<option value="" disabled selected>Round</option>
 						<option value="Wedding">Wedding</option>
@@ -50,18 +57,31 @@
 </div>
 
 <div class="row">
-	<div class="col s12 m6">
+	<div class="col s3 offset-s3">
 		<div class="card blue-grey darken-1">
+			<form method="post" action="/admin/expense">
 			<div class="card-content white-text">
 				<span class="card-title">Register an expense</span>
-				<p>This card will be used to record an expense made for an event</p>
+				<input
+						placeholder="Amount" id="amount" type="number" name="contribution"
+						class="validate">
+				<input
+						placeholder="Description" id="desc" type="text" name="name"
+						class="validate">
+				<input
+						 id="round" type="text" name="round" value="EXPENSE" hidden="true"
+						class="validate">
 			</div>
 			<div class="card-action">
-				<a href="#">This is a link</a> <a href="#">This is a link</a>
-			</div>
+					<button class="btn waves-effect blue-grey" type="submit"
+						name="action">
+						Add Expense <i class="material-icons right"></i>
+					</button>
+				</div>
+			</form>
 		</div>
 	</div>
-	<div class="col s12 m6">
+	<div class="col s3">
 		<div class="card blue-grey darken-1">
 			<div class="card-content white-text">
 				<span class="card-title">Coming Soon</span>
