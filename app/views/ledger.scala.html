@@ -1,0 +1,30 @@
+@(message: String, ledger: List[Ledger]) @main("Welcome to Play") {
+
+<table class="bordered highlight centered">
+	<thead>
+		<tr>
+			<th data-field="id">NAME</th>
+			<th data-field="contribution">CONTRIBUTION</th>
+			<th data-field="round">ROUND</th>
+		</tr>
+	</thead>
+
+	<tbody id="list">
+	
+		@for(entry <- ledger){
+			<tr>
+				<td>@entry.name</td>
+				<td>@entry.contribution</td>
+				<td>@entry.roundkey</td>
+			</tr>
+		}
+
+	</tbody>
+
+</table>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+	<a href="/" class="btn-floating btn-large yellow accent-3" style="background-color: #ffea00; color: black;">Balance</a>
+</div>
+
+}
