@@ -101,5 +101,19 @@ create table ledger(
       }
       names
   }
+  
+  def loadLedger: List[Ledger] = {
+    val ledgers: List[Ledger] = scalikejdbc.DB readOnly { implicit session =>
+        sql"select name,contribution,round_key from ledger order by updated_at desc LIMIT 50".map(rs => new Ledger(rs.string("name"), rs.int("contribution"), rs.string("round_key"))).list.apply()
+      }
+    ledgers
+  }
+  
+  def computeBalance: Int = {
+    val balance: Option[Int] = scalikejdbc.DB readOnly { implicit session =>
+      sql"SELECT TOP 1 total_balance FROM ledger ORDER BY id desc".map(rs => rs.int("total_balance")).first.apply()
+    }
+    balance.get
+  }
 
 }

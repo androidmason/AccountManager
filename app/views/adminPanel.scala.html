@@ -1,43 +1,36 @@
-@(names: List[String], message: String) @main("Welcome Admin") {
+@(names: List[String], message: String, balance:Int) @main("Welcome Admin") {
 
-@if(!message.isEmpty())
-{
-	<script type="text/javascript"
-		Materialize.toast(message, 3000, 'rounded')
-	</script>
-}
+<script type="text/javascript">
+	Materialize.toast('@message', 3000, 'rounded')
+</script>
 
 <div class="row">
 	<div class="col s3 offset-s3">
-		<div class="card blue-grey darken-1">
+		<div class="card blue lighten-1 hoverable">
 			<form method="post" action="/admin/collect">
 				<div class="card-content white-text">
 					<span class="card-title">Collect payment</span> <input
 						placeholder="Amount" id="amount" type="number" name="balance"
-						class="validate"> <select name="name">
-						<option value="" disabled selected>Member Name</option>
-						@for(name <- names){
-						<option value=@name>@name</option>
-						
-						}
+						class="validate" required="required"> <select name="name" required="required">
+						<option value="" disabled selected>Member Name</option> @for(name
+						<- names){
+						<option value=@name>@name</option> }
 					</select>
 
 				</div>
 				<div class="card-action">
-					<button class="btn waves-effect blue-grey" type="submit"
-						name="action">
-						Submit <i class="material-icons right"></i>
-					</button>
+					<button class="btn waves-effect waves-teal"
+						style="background-color: #ffea00; color: black;" type="submit"
+						name="action">Submit</button>
 				</div>
 			</form>
 		</div>
 	</div>
 	<div class="col s3">
-		<div class="card blue-grey darken-1">
+		<div class="card blue lighten-1 hoverable">
 			<form method="post" action="/admin/round">
 				<div class="card-content white-text">
-					<span class="card-title">Add Round</span> <select
-						name="round">
+					<span class="card-title">Add Round</span> <select name="round" required="required">
 						<option value="" disabled selected>Round</option>
 						<option value="Wedding">Wedding</option>
 						<option value="Birthday">Birthday</option>
@@ -46,7 +39,8 @@
 
 				</div>
 				<div class="card-action">
-					<button class="btn waves-effect blue-grey" type="submit"
+					<button class="btn waves-effect waves-teal"
+						style="background-color: #ffea00; color: black;" type="submit"
 						name="action">
 						Add <i class="material-icons right"></i>
 					</button>
@@ -58,22 +52,19 @@
 
 <div class="row">
 	<div class="col s3 offset-s3">
-		<div class="card blue-grey darken-1">
+		<div class="card blue lighten-1 hoverable">
 			<form method="post" action="/admin/expense">
-			<div class="card-content white-text">
-				<span class="card-title">Register an expense</span>
-				<input
+				<div class="card-content white-text">
+					<span class="card-title">Register an expense</span> <input
 						placeholder="Amount" id="amount" type="number" name="contribution"
-						class="validate">
-				<input
-						placeholder="Description" id="desc" type="text" name="name"
-						class="validate">
-				<input
-						 id="round" type="text" name="round" value="EXPENSE" hidden="true"
-						class="validate">
-			</div>
-			<div class="card-action">
-					<button class="btn waves-effect blue-grey" type="submit"
+						class="validate" required="required"> <input placeholder="Description"
+						id="desc" type="text" name="name" class="validate" required="required"> <input
+						id="round" type="text" name="round" value="EXPENSE" hidden="true"
+						class="validate" required="required">
+				</div>
+				<div class="card-action">
+					<button class="btn waves-effect waves-teal"
+						style="background-color: #ffea00; color: black;" type="submit"
 						name="action">
 						Add Expense <i class="material-icons right"></i>
 					</button>
@@ -82,16 +73,22 @@
 		</div>
 	</div>
 	<div class="col s3">
-		<div class="card blue-grey darken-1">
+		<div class="card blue lighten-1 hoverable">
 			<div class="card-content white-text">
 				<span class="card-title">Coming Soon</span>
-				<p>This card will be used to send email reminders for events, clearing dues, etc</p>
+				<p>This card will be used to send email reminders for events,
+					clearing dues, etc</p>
 			</div>
 			<div class="card-action">
 				<a href="#"></a> <a href="#"></a>
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="fixed-action-btn" style="top: 45px; right: 24px;">
+	Balance<br /> <a class="btn-floating btn-large yellow accent-3"
+		style="animation: beat .25s infinite alternate; transform-origin: center;">@balance</a>
 </div>
 
 }

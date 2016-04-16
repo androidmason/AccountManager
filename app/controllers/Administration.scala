@@ -14,7 +14,7 @@ class Administration extends Controller {
   def getAdminPanel(message: String) =
     Action { request =>
       request.session.get("authourization").map { status =>
-        Ok(views.html.adminPanel(DB.getNames,message))
+        Ok(views.html.adminPanel(DB.getNames,message,DB.computeBalance))
       }.getOrElse {
         Unauthorized("Oops, you are not connected")
       }
@@ -30,9 +30,8 @@ class Administration extends Controller {
         val balanceSheet = collectPaymentInfo.bindFromRequest.get
         DB.updateBalanceSheet(balanceSheet.name, balanceSheet.balance)
         DB.makeEntryToLedger(new Ledger(balanceSheet.name, balanceSheet.balance, "PAYMENT"))
-        Redirect(routes.Administration.getAdminPanel())
+        Redirect(routes.Administration.getAdminPanel("Payment collection registered successfully"))
       }.getOrElse(Redirect(routes.Authentication.getLogin()))
-
   }
 
   val addRoundInfo = Form(
@@ -43,7 +42,7 @@ class Administration extends Controller {
       request.session.get("authourization").map { status =>
         val round = addRoundInfo.bindFromRequest.get
         DB.addRound(round.toUpperCase())
-        Redirect(routes.Administration.getAdminPanel())
+        Redirect(routes.Administration.getAdminPanel("New Round added"))
       }.getOrElse(Redirect(routes.Authentication.getLogin()))
   }
   
@@ -56,9 +55,7 @@ class Administration extends Controller {
       request.session.get("authourization").map { status =>
         val ledger = addExpenseInfo.bindFromRequest.get
         DB.makeEntryToLedger(ledger)
-        Redirect(routes.Administration.getAdminPanel(""))
+        Redirect(routes.Administration.getAdminPanel("Expense added"))
       }.getOrElse(Redirect(routes.Authentication.getLogin()))
   }
-  
-
 }
