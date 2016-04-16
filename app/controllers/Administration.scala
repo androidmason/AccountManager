@@ -7,13 +7,14 @@ import play.api.data.Form
 import play.api.data.Forms._
 import models.DB
 import models.Ledger
+import common.Round
 
 class Administration extends Controller {
 
-  def getAdminPanel =
+  def getAdminPanel(message: String) =
     Action { request =>
       request.session.get("authourization").map { status =>
-        Ok(views.html.adminPanel(DB.getNames))
+        Ok(views.html.adminPanel(DB.getNames,message))
       }.getOrElse {
         Unauthorized("Oops, you are not connected")
       }
@@ -45,5 +46,19 @@ class Administration extends Controller {
         Redirect(routes.Administration.getAdminPanel())
       }.getOrElse(Redirect(routes.Authentication.getLogin()))
   }
+  
+  val addExpenseInfo: Form[Ledger] = Form(
+      mapping("name" -> text, "contribution" -> number, "round" -> text)(Ledger.apply)(Ledger.unapply)
+  )
+  
+  def addExpense = Action {
+    implicit request => 
+      request.session.get("authourization").map { status =>
+        val ledger = addExpenseInfo.bindFromRequest.get
+        DB.makeEntryToLedger(ledger)
+        Redirect(routes.Administration.getAdminPanel(""))
+      }.getOrElse(Redirect(routes.Authentication.getLogin()))
+  }
+  
 
 }

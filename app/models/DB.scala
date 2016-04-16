@@ -68,11 +68,11 @@ create table ledger(
   def makeEntryToLedger(ledger: Ledger) = {
 
     var contribution: Int = ledger.contribution
-    if (ledger.roundkey == Round.EXPENSE)
+    if (ledger.roundkey == Round.EXPENSE.toString())
       contribution = ledger.contribution * -1
 
     val previousBalance: Option[Int] = scalikejdbc.DB readOnly { implicit session =>
-      sql"SELECT TOP 1 total_balance FROM ledger ORDER BY id".map(rs => rs.int("total_balance")).first.apply()
+      sql"SELECT TOP 1 total_balance FROM ledger ORDER BY id desc".map(rs => rs.int("total_balance")).first.apply()
     }
     val newBalance = contribution + previousBalance.getOrElse(0)
 
@@ -100,7 +100,6 @@ create table ledger(
         sql"select name from balance_sheet".map(rs => (rs.string("name"))).list.apply()
       }
       names
-    
   }
 
 }

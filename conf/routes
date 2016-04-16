@@ -17,6 +17,7 @@ POST   /authenticate	controllers.Authentication.authenticate
 GET    /admin/manage	controllers.Administration.getAdminPanel
 POST   /admin/collect	controllers.Administration.collectPayment
 POST   /admin/round		controllers.Administration.addRound
+POST   /admin/expense   controllers.Administration.addExpense
 
 
 
