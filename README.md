@@ -2,7 +2,7 @@
 
 Account management software is an application that makes managing group accounts much simpler. It eliminates the overhead of using excel sheet to maintain accounts of a group. It can be used by various committees handling various events for the group eg: Cultural Committee of an organization, Committees in housing society, etc. Following are the key features in the software
 
-- Public access to balance sheet and ledegers (Transparency in accounting)
+- Public access to balance sheet and ledgers (Transparency in accounting)
 - Admin panel to manage timely transaction(Expenses, Collecting dues, adding a new collection round)
 
 # Installation
