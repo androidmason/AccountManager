@@ -18,6 +18,8 @@ libraryDependencies ++= Seq(
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
+enablePlugins(JavaServerAppPackaging)
+
 EclipseKeys.withSource := true
 
 // Play provides two styles of routers, one expects its actions to be injected, the
